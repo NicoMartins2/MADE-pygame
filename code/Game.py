@@ -22,8 +22,8 @@ class Game:
 
             if menu_return == MENU_OPTION[0]:
                 # Exibe msg1Bg por 6 segundos
-                #level = Level(self.window, 'msg1', time_sec=6)
-                #level.run()
+                level = Level(self.window, 'msg1', time_sec=6)
+                level.run()
                 # Após 6 segundos, inicia o Level1
                 level1 = Level(self.window, 'Level1')
                 level1.run()
