@@ -4,7 +4,7 @@ import sys
 
 import pygame
 
-from code.Const import WIN_WIDTH, WIN_HEIGHT, MENU_OPTION
+from code.Const import WIN_WIDTH, WIN_HEIGHT, MENU_OPTION, C_BLACK
 from code.Level import Level
 from code.Menu import Menu
 
@@ -21,8 +21,12 @@ class Game:
             menu_return = menu.run()
 
             if menu_return == MENU_OPTION[0]:
-                level = Level(self.window,'msg1')
-                level.run()
+                # Exibe msg1Bg por 6 segundos
+                #level = Level(self.window, 'msg1', time_sec=6)
+                #level.run()
+                # Após 6 segundos, inicia o Level1
+                level1 = Level(self.window, 'Level1')
+                level1.run()
             else:
                 pygame.quit()
                 sys.exit()

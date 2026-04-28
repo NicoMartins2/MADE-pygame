@@ -14,7 +14,7 @@ PLAYER_SPEED = {
 
 BG_SPEED = {
     'msg1Bg': 0,
-    'Level1Bg': 1,
+    'Level1Bg': 0,
 }
 
 MENU_OPTION = ('Aperte ENTER para começar','')
