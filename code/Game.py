@@ -22,11 +22,17 @@ class Game:
 
             if menu_return == MENU_OPTION[0]:
                 # Exibe msg1Bg por 6 segundos
-                level = Level(self.window, 'msg1', time_sec=6)
-                level.run()
+                #msg1 = Level(self.window, 'msg1', time_sec=6)
+                #msg1.run()
                 # Após 6 segundos, inicia o Level1
                 level1 = Level(self.window, 'Level1')
                 level1.run()
+                # msg2
+                msg2 = Level(self.window, 'msg2', time_sec=6)
+                msg2.run()
+                # level2
+                level2 = Level(self.window, 'Level2')
+                level2.run()
             else:
                 pygame.quit()
                 sys.exit()

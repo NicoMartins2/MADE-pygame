@@ -62,6 +62,15 @@ class Level:
 
                     if not found_player:
                         return False
+                    
+                    if EntityFactory.get_entity('Player1').rect.centerx > WIN_WIDTH:
+                        return False
+
+                for ent in self.entity_list:
+                    if isinstance(ent, Player):
+                        if ent.rect.right > WIN_WIDTH:  
+                            return True
+
                 self.level_line(C_BLACK, (0, WIN_HEIGHT - 100), (WIN_WIDTH, WIN_HEIGHT - 100), 5)
                 pygame.display.flip()
 
