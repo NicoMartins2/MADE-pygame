@@ -7,7 +7,7 @@ import pygame
 from pygame import Surface, Rect
 from pygame.font import Font
 
-from code.Const import C_WHITE, WIN_HEIGHT, MENU_OPTION, SPAWN_TIME, C_GREEN, C_CYAN, C_BLACK, WIN_WIDTH
+from code.Const import C_WHITE, WIN_HEIGHT, MENU_OPTION, SPAWN_TIME, C_GREEN, C_CYAN, C_BLACK, C_BROWN, WIN_WIDTH
 from code.Entity import Entity
 from code.EntityFactory import EntityFactory
 #from code.EntityMediator import EntityMediator
@@ -25,7 +25,7 @@ class Level:
             self.entity_list.extend(bg)
         else:
             self.entity_list.append(bg)
-        player = EntityFactory.get_entity('Player1')
+        player = EntityFactory.get_entity('Player1', self.name)
         self.entity_list.append(player)
 
     def run(self):
@@ -71,7 +71,16 @@ class Level:
                         if ent.rect.right > WIN_WIDTH:  
                             return True
 
-                self.level_line(C_BLACK, (0, WIN_HEIGHT - 100), (WIN_WIDTH, WIN_HEIGHT - 100), 5)
+                if self.name == 'Level1':
+                    self.level_line(C_BLACK, (0, WIN_HEIGHT - 100), (WIN_WIDTH, WIN_HEIGHT - 100), 5)
+                elif self.name == 'Level2':
+                    pygame.draw.rect(self.window, C_GREEN, (0, WIN_HEIGHT - 100, 800, 100))
+                    pygame.draw.rect(self.window, C_GREEN, (900, WIN_HEIGHT - 100, 800, 100))
+                    pygame.draw.rect(self.window, C_BROWN, (750, WIN_HEIGHT - 150, 10, 50))
+                    pygame.draw.rect(self.window, C_BROWN, (725, WIN_HEIGHT - 140,50, 20))
+                    if Player('Player1', (10, WIN_HEIGHT - 132), 'Level2').rect.centery < WIN_HEIGHT - 150:
+                        self.level_line(C_CYAN, (0, WIN_HEIGHT - 100), (WIN_WIDTH, WIN_HEIGHT - 100), 5)
+                        
                 pygame.display.flip()
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):

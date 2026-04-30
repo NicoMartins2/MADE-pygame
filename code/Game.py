@@ -7,6 +7,7 @@ import pygame
 from code.Const import WIN_WIDTH, WIN_HEIGHT, MENU_OPTION, C_BLACK
 from code.Level import Level
 from code.Menu import Menu
+from code.Player import Player
 
 
 class Game:
@@ -25,11 +26,11 @@ class Game:
                 #msg1 = Level(self.window, 'msg1', time_sec=6)
                 #msg1.run()
                 # Após 6 segundos, inicia o Level1
-                level1 = Level(self.window, 'Level1')
-                level1.run()
+                #level1 = Level(self.window, 'Level1')
+                #level1.run()
                 # msg2
-                msg2 = Level(self.window, 'msg2', time_sec=6)
-                msg2.run()
+                #msg2 = Level(self.window, 'msg2', time_sec=6)
+                #msg2.run()
                 # level2
                 level2 = Level(self.window, 'Level2')
                 level2.run()

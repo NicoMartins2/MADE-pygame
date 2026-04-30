@@ -10,7 +10,7 @@ from code.Player import Player
 class EntityFactory:
 
     @staticmethod
-    def get_entity(entity_name: str):
+    def get_entity(entity_name: str, level_name: str = ''):
         match entity_name:
             case 'msg1Bg':
                 return Background('msg1Bg', (0, 0))
@@ -23,4 +23,4 @@ class EntityFactory:
             case 'ground2Bg':
                 return Background('ground2Bg', (0, WIN_HEIGHT - 100))
             case 'Player1':
-                return Player('Player1', (10, WIN_HEIGHT - 135))
+                return Player('Player1', (10, WIN_HEIGHT - 132), level_name)
