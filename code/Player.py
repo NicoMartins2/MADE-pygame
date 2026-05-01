@@ -28,7 +28,7 @@ class Player(Entity):
         else:
             self.sprites = None
 
-    def move(self):
+    def move(self, platforms=None):
         pressed_key = pygame.key.get_pressed()
         # Inicialização dos atributos de pulo apenas se não existirem
         if not hasattr(self, 'is_jumping'):
@@ -45,17 +45,20 @@ class Player(Entity):
             self.velocity_y = -self.jump_speed
 
         # Atualiza a física do pulo
-        if self.is_jumping:
-            self.velocity_y += self.gravity
-            self.rect.centery += self.velocity_y
-            # Verifica se atingiu o chão
+        self.velocity_y += self.gravity
+        self.rect.centery += self.velocity_y
+
+        if platforms:
+            support = self._find_support(platforms)
+            if support and self.velocity_y >= 0 and self.rect.bottom >= support.top:
+                self.rect.bottom = support.top
+                self.is_jumping = False
+                self.velocity_y = 0
+        else:
             if self.rect.bottom >= WIN_HEIGHT - 100:
                 self.rect.bottom = WIN_HEIGHT - 100
                 self.is_jumping = False
                 self.velocity_y = 0
-        else:
-            # Se não está pulando, só atualiza a posição vertical se necessário
-            self.velocity_y = 0
 
         # Movimento horizontal
         moving_left = pressed_key[PLAYER_KEY_LEFT[self.name]] and self.rect.left > 0
@@ -83,3 +86,10 @@ class Player(Entity):
                     self.animation_index = (self.animation_index + 1) % len(self.sprites[self.current_sprite])
                     self.animation_timer = 0
                 self.surf = self.sprites[self.current_sprite][self.animation_index]
+
+    def _find_support(self, platforms):
+        for platform in platforms:
+            if self.rect.right > platform.left and self.rect.left < platform.right:
+                if self.rect.bottom >= platform.top - 10 and self.rect.bottom <= platform.top + 20:
+                    return platform
+        return None

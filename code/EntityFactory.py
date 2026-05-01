@@ -22,5 +22,7 @@ class EntityFactory:
                 return Background('Level2Bg', (0, 0))
             case 'ground2Bg':
                 return Background('ground2Bg', (0, WIN_HEIGHT - 100))
+            case 'msg3Bg':
+                return Background('msg3Bg', (0, 0))
             case 'Player1':
                 return Player('Player1', (10, WIN_HEIGHT - 132), level_name)
