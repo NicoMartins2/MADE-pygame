@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import random
+import pygame
 
 from code.Background import Background
 from code.Const import WIN_WIDTH, WIN_HEIGHT
@@ -20,8 +21,13 @@ class EntityFactory:
                 return Background('msg2Bg', (0, 0))
             case 'Level2Bg':
                 return Background('Level2Bg', (0, 0))
-            case 'ground2Bg':
-                return Background('ground2Bg', (0, WIN_HEIGHT - 100))
+            case 'Level3Bg':
+                list_bg = []
+                for i in range(2):
+                    bg = Background(f'Level3Bg{i}', (0, -300))
+                    bg.time_sleep(0.5)
+                    list_bg.append(bg)
+                return list_bg
             case 'msg3Bg':
                 return Background('msg3Bg', (0, 0))
             case 'Player1':

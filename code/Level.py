@@ -13,18 +13,26 @@ from code.EntityFactory import EntityFactory
 #from code.EntityMediator import EntityMediator
 from code.Player import Player
 
-
 class Level:
     def __init__(self, window: Surface, name: str, time_sec: int = 0):
         self.window = window
         self.name = name
         self.time_sec = time_sec
         self.entity_list: list[Entity] = []
-        bg = EntityFactory.get_entity(self.name + 'Bg')
-        if isinstance(bg, list):
-            self.entity_list.extend(bg)
+
+        if self.name == 'Level3':
+            bg = EntityFactory.get_entity('Level3Bg')
+            self.backgrounds = bg if isinstance(bg, list) else [bg]  
+            self.current_bg_index = 0 
+            self.last_bg_switch_time = 0  
+            self.bg_switch_interval = 2000  
         else:
-            self.entity_list.append(bg)
+            bg = EntityFactory.get_entity(self.name + 'Bg')
+            if isinstance(bg, list):
+                self.entity_list.extend(bg)
+            else:
+                self.entity_list.append(bg)
+
         player = EntityFactory.get_entity('Player1', self.name)
         self.entity_list.append(player)
 
@@ -55,11 +63,28 @@ class Level:
                     pygame.Rect(750, WIN_HEIGHT - 150, 10, 50),
                     pygame.Rect(725, WIN_HEIGHT - 140, 50, 20)
                 ]
+
             while True:
                 clock.tick(60)
+                current_time = pygame.time.get_ticks()
+
+                # Alternância de background para o Level3
+                if self.name == 'Level3':
+                    if current_time - self.last_bg_switch_time > self.bg_switch_interval:
+                        self.current_bg_index = 1 - self.current_bg_index  # Alterna entre 0 e 1
+                        self.last_bg_switch_time = current_time
+
+                # Desenha o background atual do Level3
+                if self.name == 'Level3':
+                    self.window.blit(source=self.backgrounds[self.current_bg_index].surf, dest=self.backgrounds[self.current_bg_index].rect)
+
+                # Desenha as demais entidades
+                for ent in self.entity_list:
+                    if not (self.name == 'Level3' and isinstance(ent, Entity) and ent in self.backgrounds):
+                        self.window.blit(source=ent.surf, dest=ent.rect)
+
                 player = None
                 for ent in self.entity_list:
-                    self.window.blit(source=ent.surf, dest=ent.rect)
                     if isinstance(ent, Player):
                         player = ent
                         ent.move(level2_platforms if self.name == 'Level2' else None)
@@ -86,13 +111,21 @@ class Level:
                     pygame.draw.rect(self.window, C_GREEN, right_platform)
                     pygame.draw.rect(self.window, C_BROWN, (750, WIN_HEIGHT - 150, 10, 50))
                     pygame.draw.rect(self.window, C_BROWN, (725, WIN_HEIGHT - 140, 50, 20))
-                    if player.rect.top > WIN_HEIGHT:
-                        Level(self.window, 'msg3', time_sec=6).run()
-                        return False
-                    
+
                     if player.rect.colliderect(level2_sign[0]) and player.rect.colliderect(level2_sign[1]):
                         pygame.draw.rect(self.window, C_BLACK, (WIN_WIDTH / 2 - 170, WIN_HEIGHT / 2 - 50, 300, 100))
                         self.level_text(30, "Sempre haverá desafios.", C_WHITE, (WIN_WIDTH / 2 - 150, WIN_HEIGHT / 2))
+
+                    if player.rect.top > WIN_HEIGHT:
+                        Level(self.window, 'msg3', time_sec=6).run()
+                        return False
+                elif self.name == 'Level3':
+                    left_platform = pygame.Rect(0, WIN_HEIGHT - 100, 800, 100)
+                    right_platform = pygame.Rect(900, WIN_HEIGHT - 100, 800, 100)
+                    pygame.draw.rect(self.window, C_GREEN, left_platform)
+                    pygame.draw.rect(self.window, C_GREEN, right_platform)
+                    pygame.draw.rect(self.window, C_BROWN, (750, WIN_HEIGHT - 150, 10, 50))
+                    pygame.draw.rect(self.window, C_BROWN, (725, WIN_HEIGHT - 140, 50, 20))
 
                 pygame.display.flip()
 
