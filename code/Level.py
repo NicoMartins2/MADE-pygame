@@ -98,6 +98,11 @@ class Level:
 
                 if player is None:
                     return False
+                
+                # mensagem ao tentar retornar
+                if player.rect.left < 0:
+                    pygame.draw.rect(self.window, C_BLACK, (WIN_WIDTH / 2 - 170, WIN_HEIGHT / 2 - 50, 300, 100))
+                    self.level_text(30, "Não há como voltar atrás.", C_WHITE, (WIN_WIDTH / 2 - 150, WIN_HEIGHT / 2))
 
                 if player.rect.right > WIN_WIDTH:
                     return True
