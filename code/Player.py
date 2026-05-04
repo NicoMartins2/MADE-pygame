@@ -12,14 +12,31 @@ class Player(Entity):
     def __init__(self, name: str, position: tuple, level_name: str = ''):
         super().__init__(name, position)
         self.level_name = level_name
-        self.animated = level_name == 'Level2'
+        self.animated = level_name == 'Level2' or level_name == 'Level3'
         if self.animated:
-            self.sprites = {
+            self.sprites1 = {
                 'stand': pygame.image.load('./asset/char1_stand.png').convert_alpha(),
                 'left': [pygame.image.load('./asset/char1_left1.png').convert_alpha(),
                          pygame.image.load('./asset/char1_left2.png').convert_alpha()],
                 'right': [pygame.image.load('./asset/char1_right1.png').convert_alpha(),
                           pygame.image.load('./asset/char1_right2.png').convert_alpha()]
+            }
+            self.sprites2 = {
+                'stand': [pygame.image.load('./asset/char2_stand.png').convert_alpha(),
+                          pygame.image.load('./asset/char2_stand1.png').convert_alpha(),
+                          pygame.image.load('./asset/char2_stand2.png').convert_alpha()],
+                'left': [pygame.image.load('./asset/char2_left1.png').convert_alpha(),
+                         pygame.image.load('./asset/char2_left2.png').convert_alpha(),
+                         pygame.image.load('./asset/char2_left3.png').convert_alpha(),
+                         pygame.image.load('./asset/char2_left4.png').convert_alpha(),
+                         pygame.image.load('./asset/char2_left5.png').convert_alpha(),
+                         pygame.image.load('./asset/char2_left6.png').convert_alpha()],
+                'right': [pygame.image.load('./asset/char2_right1.png').convert_alpha(),
+                          pygame.image.load('./asset/char2_right2.png').convert_alpha(),
+                          pygame.image.load('./asset/char2_right3.png').convert_alpha(),
+                          pygame.image.load('./asset/char2_right4.png').convert_alpha(),
+                          pygame.image.load('./asset/char2_right5.png').convert_alpha(),
+                          pygame.image.load('./asset/char2_right6.png').convert_alpha()]
             }
             self.current_sprite = 'stand'
             self.animation_index = 0
@@ -70,22 +87,40 @@ class Player(Entity):
             self.rect.centerx += PLAYER_SPEED[self.name]
 
         # Animação de sprites se ativada
-        if self.animated:
-            self.animation_timer += 1
-            if moving_left:
-                self.current_sprite = 'left'
-            elif moving_right:
-                self.current_sprite = 'right'
-            else:
-                self.current_sprite = 'stand'
+        if self.level_name == 'Level2':
+            if self.animated:
+                self.animation_timer += 1
+                if moving_left:
+                    self.current_sprite = 'left'
+                elif moving_right:
+                    self.current_sprite = 'right'
+                else:
+                    self.current_sprite = 'stand'
 
-            if self.current_sprite == 'stand':
-                self.surf = self.sprites['stand']
-            else:
-                if self.animation_timer >= 60 // self.animation_speed:  # 60 FPS
-                    self.animation_index = (self.animation_index + 1) % len(self.sprites[self.current_sprite])
-                    self.animation_timer = 0
-                self.surf = self.sprites[self.current_sprite][self.animation_index]
+                if self.current_sprite == 'stand':
+                    self.surf = self.sprites1['stand']
+                else:
+                    if self.animation_timer >= 60 // self.animation_speed:  # 60 FPS
+                        self.animation_index = (self.animation_index + 1) % len(self.sprites1[self.current_sprite])
+                        self.animation_timer = 0
+                    self.surf = self.sprites1[self.current_sprite][self.animation_index]
+        else:
+            if self.animated:
+                self.animation_timer += 1
+                if moving_left:
+                    self.current_sprite = 'left'
+                elif moving_right:
+                    self.current_sprite = 'right'
+                else:
+                    self.current_sprite = 'stand'
+
+                if self.current_sprite == 'stand':
+                    self.surf = self.sprites2['stand']
+                else:
+                    if self.animation_timer >= 60 // self.animation_speed:  # 60 FPS
+                        self.animation_index = (self.animation_index + 1) % len(self.sprites2[self.current_sprite])
+                        self.animation_timer = 0
+                    self.surf = self.sprites2[self.current_sprite][self.animation_index]
 
     def _find_support(self, platforms):
         for platform in platforms:

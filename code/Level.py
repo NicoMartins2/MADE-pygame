@@ -34,7 +34,11 @@ class Level:
                 self.entity_list.append(bg)
 
         player = EntityFactory.get_entity('Player1', self.name)
-        self.entity_list.append(player)
+        if self.name == 'Level3' and isinstance(player, Player):
+            player.surf = player.sprites2['stand']  # Usa o sprite de "stand" para o Level3
+            self.entity_list.extend([player])  # Adiciona o player à lista de entidades
+        elif isinstance(player, Player):
+            self.entity_list.append(player)
 
     def run(self):
         clock = pygame.time.Clock()

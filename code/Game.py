@@ -35,8 +35,11 @@ class Game:
                 level2 = Level(self.window, 'Level2')
                 level2.run()
                 # level3
+                if level2.run() == False: # ao cair no buraco, volta para o menu
+                    continue
                 level3 = Level(self.window, 'Level3')
                 level3.run()
             else:
                 pygame.quit()
                 sys.exit()
+            continue
