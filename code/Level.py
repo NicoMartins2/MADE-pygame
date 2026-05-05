@@ -28,19 +28,27 @@ class Level:
             self.bg_switch_interval = 2000  
         else:
             bg = EntityFactory.get_entity(self.name + 'Bg')
+            if bg is None:
+                raise ValueError(f"No background entity found for level '{self.name}'")
             if isinstance(bg, list):
                 self.entity_list.extend(bg)
             else:
                 self.entity_list.append(bg)
 
         player = EntityFactory.get_entity('Player1', self.name)
+        if player is None:
+            raise ValueError(f"No player entity found for level '{self.name}'")
         if self.name == 'Level3' and isinstance(player, Player):
-            player.surf = player.sprites2['stand']  # Usa o sprite de "stand" para o Level3
+            player.surf = player.sprites2['stand'][0]  # Usa o primeiro frame "stand" para o Level3
             self.entity_list.extend([player])  # Adiciona o player à lista de entidades
         elif isinstance(player, Player):
             self.entity_list.append(player)
 
     def run(self):
+        if(self.name == 'Level3'):
+            pygame.mixer_music.load(f'./asset/{self.name}.mp3')
+            pygame.mixer_music.set_volume(0.3)
+            pygame.mixer_music.play(-1)
         clock = pygame.time.Clock()
         if self.time_sec > 0:
             start_ticks = pygame.time.get_ticks()

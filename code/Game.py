@@ -33,9 +33,12 @@ class Game:
                 #msg2.run()
                 # level2
                 level2 = Level(self.window, 'Level2')
-                level2.run()
+                level2_result = level2.run()
+                # msg4
+                msg4 = Level(self.window, 'msg4', time_sec=6)
+                msg4.run()
                 # level3
-                if level2.run() == False: # ao cair no buraco, volta para o menu
+                if level2_result is False: # ao cair no buraco, volta para o menu
                     continue
                 level3 = Level(self.window, 'Level3')
                 level3.run()

@@ -115,7 +115,7 @@ class Player(Entity):
                     self.current_sprite = 'stand'
 
                 if self.current_sprite == 'stand':
-                    self.surf = self.sprites2['stand']
+                    self.surf = self.sprites2['stand'][0]
                 else:
                     if self.animation_timer >= 60 // self.animation_speed:  # 60 FPS
                         self.animation_index = (self.animation_index + 1) % len(self.sprites2[self.current_sprite])
