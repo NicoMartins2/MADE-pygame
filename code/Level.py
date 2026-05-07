@@ -45,10 +45,6 @@ class Level:
             self.entity_list.append(player)
 
     def run(self):
-        if(self.name == 'Level3'):
-            pygame.mixer_music.load(f'./asset/{self.name}.mp3')
-            pygame.mixer_music.set_volume(0.3)
-            pygame.mixer_music.play(-1)
         clock = pygame.time.Clock()
         if self.time_sec > 0:
             start_ticks = pygame.time.get_ticks()
@@ -75,8 +71,23 @@ class Level:
                     pygame.Rect(750, WIN_HEIGHT - 150, 10, 50),
                     pygame.Rect(725, WIN_HEIGHT - 140, 50, 20)
                 ]
+            if self.name == 'Level3':
+                level3_platforms = [
+                    pygame.Rect(0, 650, 260, 120),   
+                    pygame.Rect(320, 550, 450, 170), 
+                    pygame.Rect(800, 500, 200, 220), 
+                    pygame.Rect(1020, 450, 260, 270),
+                ]
+                level3_sign = [
+                    pygame.Rect(750, WIN_HEIGHT - 150, 10, 50),
+                    pygame.Rect(725, WIN_HEIGHT - 140, 50, 20)
+                ]
 
             while True:
+                if self.name == 'Level3':
+                    pygame.mixer_music.load(f'./asset/{self.name}.mp3')
+                    pygame.mixer_music.set_volume(0.3)
+                    pygame.mixer_music.play(-1)
                 clock.tick(60)
                 current_time = pygame.time.get_ticks()
 
@@ -137,12 +148,16 @@ class Level:
                         Level(self.window, 'msg3', time_sec=6).run()
                         return False
                 elif self.name == 'Level3':
-                    left_platform = pygame.Rect(0, WIN_HEIGHT - 100, 800, 100)
-                    right_platform = pygame.Rect(900, WIN_HEIGHT - 100, 800, 100)
-                    pygame.draw.rect(self.window, C_GREEN, left_platform)
-                    pygame.draw.rect(self.window, C_GREEN, right_platform)
+                    for platform in level3_platforms:
+                        pygame.draw.rect(self.window, C_GREEN, platform)
                     pygame.draw.rect(self.window, C_BROWN, (750, WIN_HEIGHT - 150, 10, 50))
                     pygame.draw.rect(self.window, C_BROWN, (725, WIN_HEIGHT - 140, 50, 20))
+                    if player.rect.colliderect(level3_sign[0]) and player.rect.colliderect(level3_sign[1]):
+                        pygame.draw.rect(self.window, C_BLACK, (WIN_WIDTH / 2 - 170, WIN_HEIGHT / 2 - 50, 300, 100))
+                        self.level_text(30, "O caminho é incerto, mas siga em frente.", C_WHITE, (WIN_WIDTH / 2 - 150, WIN_HEIGHT / 2))
+                    if player.rect.top > WIN_HEIGHT:
+                        Level(self.window, 'msg3', time_sec=6).run()
+                        return False
 
                 pygame.display.flip()
 

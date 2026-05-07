@@ -100,7 +100,7 @@ class Player(Entity):
                 if self.current_sprite == 'stand':
                     self.surf = self.sprites1['stand']
                 else:
-                    if self.animation_timer >= 60 // self.animation_speed:  # 60 FPS
+                    if self.animation_timer >= 60 // self.animation_speed:
                         self.animation_index = (self.animation_index + 1) % len(self.sprites1[self.current_sprite])
                         self.animation_timer = 0
                     self.surf = self.sprites1[self.current_sprite][self.animation_index]
@@ -117,7 +117,7 @@ class Player(Entity):
                 if self.current_sprite == 'stand':
                     self.surf = self.sprites2['stand'][0]
                 else:
-                    if self.animation_timer >= 60 // self.animation_speed:  # 60 FPS
+                    if self.animation_timer >= 60 // self.animation_speed:
                         self.animation_index = (self.animation_index + 1) % len(self.sprites2[self.current_sprite])
                         self.animation_timer = 0
                     self.surf = self.sprites2[self.current_sprite][self.animation_index]
