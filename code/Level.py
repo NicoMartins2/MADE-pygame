@@ -7,10 +7,9 @@ import pygame
 from pygame import Surface, Rect
 from pygame.font import Font
 
-from code.Const import C_WHITE, WIN_HEIGHT, C_GREEN, C_BLACK, C_BROWN, WIN_WIDTH
+from code.Const import C_WHITE, WIN_HEIGHT, C_GREEN, C_BLACK, C_BROWN, WIN_WIDTH, LEVEL2_PLATFORMS, LEVEL2_SIGN, LEVEL3_PLATFORMS, LEVEL3_SIGN
 from code.Entity import Entity
 from code.EntityFactory import EntityFactory
-#from code.EntityMediator import EntityMediator
 from code.Player import Player
 
 class Level:
@@ -39,8 +38,8 @@ class Level:
         if player is None:
             raise ValueError(f"No player entity found for level '{self.name}'")
         if self.name == 'Level3' and isinstance(player, Player):
-            player.surf = player.sprites2['stand'][0]  # Usa o primeiro frame "stand" para o Level3
-            self.entity_list.extend([player])  # Adiciona o player à lista de entidades
+            player.surf = player.sprites2['stand'][0]  
+            self.entity_list.extend([player])
         elif isinstance(player, Player):
             self.entity_list.append(player)
 
@@ -61,47 +60,26 @@ class Level:
                 if seconds >= self.time_sec:
                     return
         else:
-            level2_platforms = []
-            if self.name == 'Level2':
-                level2_platforms = [
-                    pygame.Rect(0, WIN_HEIGHT - 100, 800, 100),
-                    pygame.Rect(900, WIN_HEIGHT - 100, 800, 100)
-                ]
-                level2_sign = [
-                    pygame.Rect(750, WIN_HEIGHT - 150, 10, 50),
-                    pygame.Rect(725, WIN_HEIGHT - 140, 50, 20)
-                ]
-            if self.name == 'Level3':
-                level3_platforms = [
-                    pygame.Rect(0, 650, 260, 120),   
-                    pygame.Rect(320, 550, 450, 170), 
-                    pygame.Rect(800, 500, 200, 220), 
-                    pygame.Rect(1020, 450, 260, 270),
-                ]
-                level3_sign = [
-                    pygame.Rect(750, WIN_HEIGHT - 150, 10, 50),
-                    pygame.Rect(725, WIN_HEIGHT - 140, 50, 20)
-                ]
-
+            level2_platforms = LEVEL2_PLATFORMS
+            level2_sign = LEVEL2_SIGN
+            level3_platforms = LEVEL3_PLATFORMS
+            level3_sign = LEVEL3_SIGN
             while True:
-                if self.name == 'Level3':
+                if f'./asset/{self.name}.mp3':    
                     pygame.mixer_music.load(f'./asset/{self.name}.mp3')
                     pygame.mixer_music.set_volume(0.3)
                     pygame.mixer_music.play(-1)
                 clock.tick(60)
                 current_time = pygame.time.get_ticks()
 
-                # Alternância de background para o Level3
                 if self.name == 'Level3':
                     if current_time - self.last_bg_switch_time > self.bg_switch_interval:
                         self.current_bg_index = 1 - self.current_bg_index  # Alterna entre 0 e 1
                         self.last_bg_switch_time = current_time
 
-                # Desenha o background atual do Level3
                 if self.name == 'Level3':
                     self.window.blit(source=self.backgrounds[self.current_bg_index].surf, dest=self.backgrounds[self.current_bg_index].rect)
 
-                # Desenha as demais entidades
                 for ent in self.entity_list:
                     if not (self.name == 'Level3' and isinstance(ent, Entity) and ent in self.backgrounds):
                         self.window.blit(source=ent.surf, dest=ent.rect)
@@ -110,7 +88,10 @@ class Level:
                 for ent in self.entity_list:
                     if isinstance(ent, Player):
                         player = ent
-                        ent.move(level2_platforms if self.name == 'Level2' else None)
+                        if self.name == 'Level2':
+                            ent.move(level2_platforms)
+                        elif self.name == 'Level3':
+                            ent.move(level3_platforms)
                     else:
                         ent.move()
 
@@ -150,10 +131,10 @@ class Level:
                 elif self.name == 'Level3':
                     for platform in level3_platforms:
                         pygame.draw.rect(self.window, C_GREEN, platform)
-                    pygame.draw.rect(self.window, C_BROWN, (750, WIN_HEIGHT - 150, 10, 50))
-                    pygame.draw.rect(self.window, C_BROWN, (725, WIN_HEIGHT - 140, 50, 20))
+                    for sign in level3_sign:
+                        pygame.draw.rect(self.window, C_BROWN, sign)
                     if player.rect.colliderect(level3_sign[0]) and player.rect.colliderect(level3_sign[1]):
-                        pygame.draw.rect(self.window, C_BLACK, (WIN_WIDTH / 2 - 170, WIN_HEIGHT / 2 - 50, 300, 100))
+                        pygame.draw.rect(self.window, C_BLACK, (WIN_WIDTH / 2 - 170, WIN_HEIGHT / 2 - 50, 450, 100))
                         self.level_text(30, "O caminho é incerto, mas siga em frente.", C_WHITE, (WIN_WIDTH / 2 - 150, WIN_HEIGHT / 2))
                     if player.rect.top > WIN_HEIGHT:
                         Level(self.window, 'msg3', time_sec=6).run()
