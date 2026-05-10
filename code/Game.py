@@ -23,18 +23,17 @@ class Game:
 
             if menu_return == MENU_OPTION[0]:
                 # Exibe msg1Bg por 6 segundos
-                #msg1 = Level(self.window, 'msg1', time_sec=6)
-                #msg1.run()
-                # Após 6 segundos, inicia o Level1
-                #level1 = Level(self.window, 'Level1')
-                #level1.run()
+                msg1 = Level(self.window, 'msg1', time_sec=6)
+                msg1.run()
+                # level1
+                level1 = Level(self.window, 'Level1')
+                level1.run()
                 # msg2
-                #msg2 = Level(self.window, 'msg2', time_sec=6)
-                #msg2.run()
+                msg2 = Level(self.window, 'msg2', time_sec=6)
+                msg2.run()
                 # level2
                 level2 = Level(self.window, 'Level2')
                 level2_result = level2.run()
-                # level3
                 if level2_result is False: # ao cair no buraco, volta para o menu
                     continue
                 # msg4
@@ -43,6 +42,12 @@ class Game:
                 # level 3
                 level3 = Level(self.window, 'Level3')
                 level3.run()
+                # msg5
+                msg5 = Level(self.window, 'msg5', time_sec=6)
+                msg5.run()
+                # final
+                final = Level(self.window, 'final', time_sec=15)
+                final.run()
             else:
                 pygame.quit()
                 sys.exit()

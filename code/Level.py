@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import random
 import sys
 
 import pygame
@@ -24,7 +23,7 @@ class Level:
             self.backgrounds = bg if isinstance(bg, list) else [bg]  
             self.current_bg_index = 0 
             self.last_bg_switch_time = 0  
-            self.bg_switch_interval = 2000  
+            self.bg_switch_interval = 2000 # tempo para alterar o bg das nuvens
         else:
             bg = EntityFactory.get_entity(self.name + 'Bg')
             if bg is None:
@@ -40,7 +39,7 @@ class Level:
         if self.name == 'Level3' and isinstance(player, Player):
             player.surf = player.sprites2['stand'][0]  
             self.entity_list.extend([player])
-        elif isinstance(player, Player):
+        elif isinstance(player, Player) and self.name != 'final':
             self.entity_list.append(player)
 
     def run(self):
@@ -65,10 +64,6 @@ class Level:
             level3_platforms = LEVEL3_PLATFORMS
             level3_sign = LEVEL3_SIGN
             while True:
-                if f'./asset/{self.name}.mp3':    
-                    pygame.mixer_music.load(f'./asset/{self.name}.mp3')
-                    pygame.mixer_music.set_volume(0.3)
-                    pygame.mixer_music.play(-1)
                 clock.tick(60)
                 current_time = pygame.time.get_ticks()
 
@@ -92,6 +87,8 @@ class Level:
                             ent.move(level2_platforms)
                         elif self.name == 'Level3':
                             ent.move(level3_platforms)
+                        elif self.name == 'Level1':
+                            ent.move()
                     else:
                         ent.move()
 
@@ -114,6 +111,9 @@ class Level:
                 if self.name == 'Level1':
                     self.level_line(C_BLACK, (0, WIN_HEIGHT - 100), (WIN_WIDTH, WIN_HEIGHT - 100), 5)
                 elif self.name == 'Level2':
+                    pygame.mixer_music.load(f'./asset/Level3.mp3')
+                    pygame.mixer_music.set_volume(0.3)
+                    pygame.mixer_music.play(-1)
                     left_platform = pygame.Rect(0, WIN_HEIGHT - 100, 800, 100)
                     right_platform = pygame.Rect(900, WIN_HEIGHT - 100, 800, 100)
                     pygame.draw.rect(self.window, C_GREEN, left_platform)
@@ -139,6 +139,9 @@ class Level:
                     if player.rect.top > WIN_HEIGHT:
                         Level(self.window, 'msg3', time_sec=6).run()
                         return False
+                
+                if not self.name == 'Level3':
+                    pygame.mixer_music.stop()
 
                 pygame.display.flip()
 
