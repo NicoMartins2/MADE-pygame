@@ -1,0 +1,5 @@
+setup.py
+MADE.egg-info/PKG-INFO
+MADE.egg-info/SOURCES.txt
+MADE.egg-info/dependency_links.txt
+MADE.egg-info/top_level.txt

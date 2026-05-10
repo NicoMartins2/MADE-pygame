@@ -17,6 +17,7 @@ class Level:
         self.name = name
         self.time_sec = time_sec
         self.entity_list: list[Entity] = []
+        self.music_started = False
 
         if self.name == 'Level3':
             bg = EntityFactory.get_entity('Level3Bg')
@@ -45,6 +46,8 @@ class Level:
     def run(self):
         clock = pygame.time.Clock()
         if self.time_sec > 0:
+            if self.name == 'msg5':
+                pygame.mixer_music.stop()
             start_ticks = pygame.time.get_ticks()
             while True:
                 clock.tick(60)
@@ -106,14 +109,13 @@ class Level:
                     self.level_text(30, "Não há como voltar atrás.", C_WHITE, (WIN_WIDTH / 2 - 150, WIN_HEIGHT / 2))
 
                 if player.rect.right > WIN_WIDTH:
+                    if self.name == 'Level3':
+                        pygame.mixer_music.stop()
                     return True
 
                 if self.name == 'Level1':
                     self.level_line(C_BLACK, (0, WIN_HEIGHT - 100), (WIN_WIDTH, WIN_HEIGHT - 100), 5)
                 elif self.name == 'Level2':
-                    pygame.mixer_music.load(f'./asset/Level3.mp3')
-                    pygame.mixer_music.set_volume(0.3)
-                    pygame.mixer_music.play(-1)
                     left_platform = pygame.Rect(0, WIN_HEIGHT - 100, 800, 100)
                     right_platform = pygame.Rect(900, WIN_HEIGHT - 100, 800, 100)
                     pygame.draw.rect(self.window, C_GREEN, left_platform)
@@ -129,6 +131,11 @@ class Level:
                         Level(self.window, 'msg3', time_sec=6).run()
                         return False
                 elif self.name == 'Level3':
+                    if not self.music_started:
+                        pygame.mixer_music.load(f'./asset/Level3.mp3')
+                        pygame.mixer_music.set_volume(0.3)
+                        pygame.mixer_music.play(-1)
+                        self.music_started = True
                     for platform in level3_platforms:
                         pygame.draw.rect(self.window, C_GREEN, platform)
                     for sign in level3_sign:
@@ -137,10 +144,11 @@ class Level:
                         pygame.draw.rect(self.window, C_BLACK, (WIN_WIDTH / 2 - 170, WIN_HEIGHT / 2 - 50, 450, 100))
                         self.level_text(30, "O caminho é incerto, mas siga em frente.", C_WHITE, (WIN_WIDTH / 2 - 150, WIN_HEIGHT / 2))
                     if player.rect.top > WIN_HEIGHT:
+                        pygame.mixer_music.stop()
                         Level(self.window, 'msg3', time_sec=6).run()
                         return False
-                
-                if not self.name == 'Level3':
+
+                if self.name == 'msg5':
                     pygame.mixer_music.stop()
 
                 pygame.display.flip()

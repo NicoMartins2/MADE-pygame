@@ -41,7 +41,9 @@ class Game:
                 msg4.run()
                 # level 3
                 level3 = Level(self.window, 'Level3')
-                level3.run()
+                level3_result = level3.run()
+                if level3_result is False: # ao cair no buraco, volta para o menu
+                    continue
                 # msg5
                 msg5 = Level(self.window, 'msg5', time_sec=6)
                 msg5.run()
